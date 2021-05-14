@@ -7,7 +7,10 @@ available_formatters = ['plain', 'bold', 'italic', 'header', 'link',
 result_string = ''
 
 
-def save_and_exit():
+def save_and_exit(string):
+    f = open('output.md', 'w', encoding='utf-8')
+    f.write(string)
+    f.close()
     exit()
 
 
@@ -113,7 +116,7 @@ while True:
         print('Special commands: !help !done')
 
     elif income == '!done':
-        save_and_exit()
+        save_and_exit(result_string)
 
     elif income in available_formatters:
         result_string += process_format(income, result_string)
