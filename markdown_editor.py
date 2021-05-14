@@ -43,7 +43,23 @@ def formatter_new_line():
     return '\n'
 
 
-def process_format(formatter):
+def read_number_of_rows():
+    while True:
+        rows = int(input('Number of rows: '))
+        if rows > 0:
+            return rows
+        else:
+            print('The number of rows should be greater than zero')
+
+
+def read_rows(n):
+    res_str = []
+    for i in range(1, n + 1):
+        res_str.append(input('Row #' + str(i) + ': '))
+    return res_str
+
+
+def process_format(formatter, prev_str):
     if formatter == 'plain':
         return formatter_plain(input('Text: '))
 
@@ -68,9 +84,24 @@ def process_format(formatter):
         return formatter_inline(input('Text: '))
 
     elif formatter == 'ordered-list':
-        pass
+        number_of_rows = read_number_of_rows()
+        res = read_rows(number_of_rows)
+        # formatted = list(map(lambda x, y: str(x) + '. ' + y, enumerate(res)))
+        formatted = [str(i + 1) + '. ' + s for i, s in enumerate(res)]
+        formatted_str = '\n'.join(formatted)
+        if prev_str and prev_str[-1] != '\n':
+            formatted_str = '\n' + formatted_str
+        return formatted_str + '\n'
+
     elif formatter == 'unordered-list':
-        pass
+        number_of_rows = read_number_of_rows()
+        res = read_rows(number_of_rows)
+        formatted = list(map(lambda x: '* ' + x, res))
+        formatted_str = '\n'.join(formatted)
+        if prev_str and prev_str[-1] != '\n':
+            formatted_str = '\n' + formatted_str
+        return formatted_str + '\n'
+
     elif formatter == 'new-line':
         return formatter_new_line()
 
@@ -85,7 +116,7 @@ while True:
         save_and_exit()
 
     elif income in available_formatters:
-        result_string += process_format(income)
+        result_string += process_format(income, result_string)
         print(result_string)
 
     else:
